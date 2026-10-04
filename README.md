@@ -3,6 +3,8 @@
 > **Project #43** · Advanced Neural Text Similarity Analysis & Structural Vector Retrieval System.  
 > Built with **Sentence Transformers (`all-MiniLM-L6-v2`)**, **FAISS (`IndexFlatIP`)**, **SQLite**, and **Flask**.
 
+📖 **Deep-Dive Technical Reference & AI Context**: For an exhaustive, misconception-free architectural breakdown, mathematical proofs, and dataflow specifications, see [PROJECT_EXPLAINER.md](file:///c:/NLP_Project/PROJECT_EXPLAINER.md).
+
 ---
 
 ## 📌 Architecture Overview
