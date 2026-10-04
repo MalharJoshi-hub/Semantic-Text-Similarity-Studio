@@ -82,14 +82,24 @@
       <!-- TAB 1: PAIR COMPARISON -->
       <section id="tab-pair" class="tab-pane active" role="tabpanel">
         
-        <!-- Quick Presets -->
-        <div class="presets-bar">
-          <span class="presets-label">Quick Test Presets:</span>
-          <div class="preset-chips">
-            <button class="preset-chip" onclick="loadPreset('paraphrase')">Paraphrase (High Sim)</button>
-            <button class="preset-chip" onclick="loadPreset('technical')">AI Tech (Conceptual Overlap)</button>
-            <button class="preset-chip" onclick="loadPreset('contrast')">Subtle Semantic Shift</button>
-            <button class="preset-chip" onclick="loadPreset('unrelated')">Unrelated Topics</button>
+        <!-- Domain Selector & Quick Presets -->
+        <div class="domain-suite-panel">
+          <div class="domain-selector-bar">
+            <span class="presets-label">Domain Suite:</span>
+            <div class="domain-chips" id="domain-chips-list">
+              <button class="domain-chip active" onclick="switchDomain('general')">🌐 General NLP</button>
+              <button class="domain-chip" onclick="switchDomain('healthcare')">🏥 Healthcare / Bio</button>
+              <button class="domain-chip" onclick="switchDomain('legal')">⚖️ Legal / NDA</button>
+              <button class="domain-chip" onclick="switchDomain('finance')">📈 FinTech / Markets</button>
+              <button class="domain-chip" onclick="switchDomain('software')">⚙️ DevOps / Cloud</button>
+            </div>
+          </div>
+
+          <div class="presets-bar">
+            <span class="presets-label">Domain Presets:</span>
+            <div class="preset-chips" id="active-preset-chips">
+              <!-- Dynamically populated based on active domain -->
+            </div>
           </div>
         </div>
 
@@ -221,6 +231,17 @@
               <button class="btn-clear-input" onclick="clearQueryInput()" title="Clear">✕</button>
             </div>
 
+            <!-- Domain Suggested Queries -->
+            <div class="suggested-queries-bar">
+              <span class="suggested-label">Try Domain Queries:</span>
+              <div class="suggested-chips" id="query-suggested-chips">
+                <button class="suggested-chip" onclick="runQuickQuery('ACE inhibitors adverse dry cough and bradykinin')">🏥 ACE inhibitor cough</button>
+                <button class="suggested-chip" onclick="runQuickQuery('limitation of aggregate liability and consequential damages')">⚖️ Liability cap</button>
+                <button class="suggested-chip" onclick="runQuickQuery('interest rate hikes to combat headline PCE inflation')">📈 Inflation rate hikes</button>
+                <button class="suggested-chip" onclick="runQuickQuery('etcd distributed key-value store holding cluster state')">⚙️ Kubernetes etcd</button>
+              </div>
+            </div>
+
             <div class="search-controls-bar">
               <div class="topk-control">
                 <label for="topk-slider">Top Results (k): <strong id="topk-val">5</strong></label>
@@ -276,6 +297,32 @@
       <!-- TAB 3: CORPUS MANAGEMENT -->
       <section id="tab-corpus" class="tab-pane" role="tabpanel">
         
+        <!-- Pre-built Domain Corpus Packs Banner -->
+        <div class="domain-packs-banner">
+          <div class="banner-text-wrap">
+            <span class="card-badge purple">Enterprise Domain Suite</span>
+            <h4 class="banner-title">One-Click Curated Domain Datasets</h4>
+            <p class="banner-sub">Instantly ingest specialized domain literature with structural chunking and vector indexing into FAISS.</p>
+          </div>
+          <div class="domain-seed-actions">
+            <button type="button" class="btn-domain-seed" onclick="seedDomain('healthcare')">
+              🏥 Healthcare Pack
+            </button>
+            <button type="button" class="btn-domain-seed" onclick="seedDomain('legal')">
+              ⚖️ Legal & NDA Pack
+            </button>
+            <button type="button" class="btn-domain-seed" onclick="seedDomain('finance')">
+              📈 FinTech Pack
+            </button>
+            <button type="button" class="btn-domain-seed" onclick="seedDomain('software')">
+              ⚙️ DevOps Pack
+            </button>
+            <button type="button" class="btn-domain-seed highlight" onclick="seedDomain('all')">
+              ✨ Ingest All 4 Domains
+            </button>
+          </div>
+        </div>
+
         <div class="corpus-grid">
           
           <!-- Ingestion Card -->

@@ -169,6 +169,124 @@ function initPairEditors() {
   });
 }
 
+let currentDomain = "general";
+let domainPacksData = {};
+
+async function fetchDomainPacks() {
+  try {
+    const res = await api("/api/datasets/domains");
+    domainPacksData = res.domains || {};
+    renderDomainPresets();
+    renderDomainQueries();
+  } catch (err) {
+    console.warn("Could not load domain packs:", err);
+  }
+}
+
+function switchDomain(domainKey) {
+  currentDomain = domainKey;
+  const chips = document.querySelectorAll("#domain-chips-list .domain-chip");
+  chips.forEach(chip => chip.classList.remove("active"));
+  chips.forEach(chip => {
+    if (chip.getAttribute("onclick") && chip.getAttribute("onclick").includes(`'${domainKey}'`)) {
+      chip.classList.add("active");
+    }
+  });
+
+  renderDomainPresets();
+  renderDomainQueries();
+}
+
+function renderDomainPresets() {
+  const container = document.getElementById("active-preset-chips");
+  if (!container) return;
+  container.innerHTML = "";
+
+  if (currentDomain === "general" || !domainPacksData[currentDomain]) {
+    const generalPresets = [
+      { key: "paraphrase", label: "Paraphrase (High Sim)" },
+      { key: "technical", label: "AI Tech (Overlap)" },
+      { key: "contrast", label: "Semantic Shift" },
+      { key: "unrelated", label: "Unrelated Topics" }
+    ];
+    generalPresets.forEach(p => {
+      const btn = document.createElement("button");
+      btn.className = "preset-chip";
+      btn.innerText = p.label;
+      btn.onclick = () => loadPreset(p.key);
+      container.appendChild(btn);
+    });
+    loadPreset("paraphrase");
+  } else {
+    const pack = domainPacksData[currentDomain];
+    pack.presets.forEach((preset) => {
+      const btn = document.createElement("button");
+      btn.className = "preset-chip";
+      btn.innerText = preset.name;
+      btn.title = `Expected: ${preset.expected}`;
+      btn.onclick = () => {
+        const t1 = document.getElementById("text1");
+        const t2 = document.getElementById("text2");
+        t1.value = preset.text1;
+        t2.value = preset.text2;
+        t1.dispatchEvent(new Event("input"));
+        t2.dispatchEvent(new Event("input"));
+        runPairComparison();
+      };
+      container.appendChild(btn);
+    });
+    if (pack.presets.length > 0) {
+      const first = pack.presets[0];
+      const t1 = document.getElementById("text1");
+      const t2 = document.getElementById("text2");
+      t1.value = first.text1;
+      t2.value = first.text2;
+      t1.dispatchEvent(new Event("input"));
+      t2.dispatchEvent(new Event("input"));
+      runPairComparison();
+    }
+  }
+}
+
+function renderDomainQueries() {
+  const container = document.getElementById("query-suggested-chips");
+  if (!container) return;
+  container.innerHTML = "";
+
+  let queries = [];
+  if (currentDomain !== "general" && domainPacksData[currentDomain]) {
+    queries = domainPacksData[currentDomain].queries || [];
+  } else {
+    queries = [
+      "ACE inhibitors adverse dry cough and bradykinin",
+      "limitation of aggregate liability and consequential damages",
+      "interest rate hikes to combat headline PCE inflation",
+      "etcd distributed key-value store holding cluster state"
+    ];
+  }
+
+  queries.forEach(q => {
+    const btn = document.createElement("button");
+    btn.className = "suggested-chip";
+    btn.innerText = q.length > 36 ? q.substring(0, 33) + "..." : q;
+    btn.title = q;
+    btn.onclick = () => runQuickQuery(q);
+    container.appendChild(btn);
+  });
+}
+
+async function seedDomain(domainKey) {
+  showToast(`Seeding domain pack: ${domainKey}...`, "info");
+  try {
+    const res = await api("/api/datasets/seed", "POST", { domain: domainKey });
+    showToast(res.message, "success");
+    await refreshStats();
+    await loadCorpusRegistry();
+  } catch (err) {
+    showToast(`Error seeding domain: ${err.message}`, "error");
+  }
+}
+
 function loadPreset(key) {
   const preset = PRESETS[key];
   if (!preset) return;
@@ -635,7 +753,5 @@ window.addEventListener("DOMContentLoaded", async () => {
   initDropzone();
   await refreshStats();
   await loadCorpusRegistry();
-
-  // Load initial preset into pair view for instant WOW
-  loadPreset("paraphrase");
+  await fetchDomainPacks();
 });

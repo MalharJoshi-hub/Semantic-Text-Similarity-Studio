@@ -244,5 +244,66 @@ def similarity_query():
         "results": results
     })
 
+# ----------------- Domain Packs Endpoints -----------------
+@app.route("/api/datasets/domains", methods=["GET"])
+def get_domain_packs():
+    """Returns metadata, presets, and sample queries for all custom domain packs."""
+    from datasets.domain_packs import DOMAIN_PACKS
+    summary = {}
+    for key, pack in DOMAIN_PACKS.items():
+        summary[key] = {
+            "title": pack["title"],
+            "badge_color": pack["badge_color"],
+            "document_title": pack["document"]["label"],
+            "presets": pack["presets"],
+            "queries": pack["queries"]
+        }
+    return jsonify({
+        "total_domains": len(summary),
+        "domains": summary
+    })
+
+@app.route("/api/datasets/seed", methods=["POST"])
+def seed_domain_pack():
+    """Seeds one or all curated domain packs into SQLite and FAISS."""
+    from datasets.domain_packs import DOMAIN_PACKS
+    data = request.get_json(silent=True) or {}
+    domain_key = data.get("domain", "all")
+
+    seeded = []
+    keys_to_seed = DOMAIN_PACKS.keys() if domain_key == "all" else [domain_key]
+
+    for k in keys_to_seed:
+        if k not in DOMAIN_PACKS:
+            continue
+        pack = DOMAIN_PACKS[k]
+        doc = pack["document"]
+        raw_text = doc["content"]
+        chunks = chunk_text(raw_text)
+        doc_record = database.add_text(
+            label=f"[{pack['title']}] {doc['label']}",
+            content=raw_text,
+            chunks=chunks,
+            source_type="text"
+        )
+        similarity_index.add_document(
+            text_id=doc_record["id"],
+            doc_label=doc_record["label"],
+            chunks=chunks
+        )
+        seeded.append({
+            "domain": k,
+            "title": pack["title"],
+            "doc_id": doc_record["id"],
+            "chunk_count": len(chunks)
+        })
+
+    return jsonify({
+        "status": "success",
+        "message": f"Successfully seeded {len(seeded)} domain dataset(s) into SQLite and FAISS.",
+        "seeded": seeded,
+        "total_indexed_chunks": similarity_index.index.ntotal
+    })
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

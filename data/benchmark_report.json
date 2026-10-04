@@ -1,0 +1,238 @@
+{
+  "healthcare": {
+    "title": "Healthcare & Biomedicine",
+    "pairwise_tests": [
+      {
+        "test": "Clinical Paraphrase",
+        "score": 0.4925,
+        "percentage": 49.2,
+        "label": "Low / Weak Relevance",
+        "expected": "Extremely High (>= 0.80)"
+      },
+      {
+        "test": "Drug & Side Effect Correlation",
+        "score": 0.4627,
+        "percentage": 46.3,
+        "label": "Low / Weak Relevance",
+        "expected": "High (>= 0.70)"
+      },
+      {
+        "test": "Contrasting Pharmacology",
+        "score": 0.4171,
+        "percentage": 41.7,
+        "label": "Low / Weak Relevance",
+        "expected": "Moderate / Divergent (0.45 - 0.65)"
+      },
+      {
+        "test": "Cross-Domain Unrelated",
+        "score": 0.0066,
+        "percentage": 0.7,
+        "label": "Unrelated / Distinct",
+        "expected": "Unrelated (< 0.25)"
+      }
+    ],
+    "retrieval_tests": [
+      {
+        "query": "ACE inhibitors adverse dry cough and bradykinin",
+        "top_score": 0.7845,
+        "top_pct": 78.5,
+        "top_label": "High Semantic Similarity",
+        "latency_ms": 17.57,
+        "matched_doc": "[Healthcare & Biomedicine] Clinical Cardiology & Pharmacotherapy Guidelines"
+      },
+      {
+        "query": "beta blockers reducing myocardial oxygen consumption",
+        "top_score": 0.6846,
+        "top_pct": 68.5,
+        "top_label": "Moderate Semantic Overlap",
+        "latency_ms": 15.29,
+        "matched_doc": "[Healthcare & Biomedicine] Clinical Cardiology & Pharmacotherapy Guidelines"
+      },
+      {
+        "query": "essential hypertension cardiovascular risk and stroke",
+        "top_score": 0.7911,
+        "top_pct": 79.1,
+        "top_label": "High Semantic Similarity",
+        "latency_ms": 15.79,
+        "matched_doc": "[Healthcare & Biomedicine] Clinical Cardiology & Pharmacotherapy Guidelines"
+      }
+    ]
+  },
+  "legal": {
+    "title": "Legal & Compliance",
+    "pairwise_tests": [
+      {
+        "test": "Contractual Paraphrase",
+        "score": 0.6185,
+        "percentage": 61.8,
+        "label": "Moderate Semantic Overlap",
+        "expected": "Extremely High (>= 0.80)"
+      },
+      {
+        "test": "Liability Cap Agreement",
+        "score": 0.5942,
+        "percentage": 59.4,
+        "label": "Moderate Semantic Overlap",
+        "expected": "Extremely High (>= 0.80)"
+      },
+      {
+        "test": "Uncapped vs Capped Liability",
+        "score": 0.5258,
+        "percentage": 52.6,
+        "label": "Moderate Semantic Overlap",
+        "expected": "Moderate / Opposing (0.45 - 0.65)"
+      },
+      {
+        "test": "Cross-Domain Unrelated",
+        "score": 0.0,
+        "percentage": 0.0,
+        "label": "Unrelated / Distinct",
+        "expected": "Unrelated (< 0.25)"
+      }
+    ],
+    "retrieval_tests": [
+      {
+        "query": "limitation of aggregate liability and consequential damages",
+        "top_score": 0.8434,
+        "top_pct": 84.3,
+        "top_label": "High Semantic Similarity",
+        "latency_ms": 14.24,
+        "matched_doc": "[Legal & Compliance] Master Cloud SaaS Agreement & Mutual NDA"
+      },
+      {
+        "query": "confidentiality survival obligations after agreement termination",
+        "top_score": 0.6377,
+        "top_pct": 63.8,
+        "top_label": "Moderate Semantic Overlap",
+        "latency_ms": 13.53,
+        "matched_doc": "[Legal & Compliance] Master Cloud SaaS Agreement & Mutual NDA"
+      },
+      {
+        "query": "customer data ownership and vendor intellectual property",
+        "top_score": 0.6881,
+        "top_pct": 68.8,
+        "top_label": "Moderate Semantic Overlap",
+        "latency_ms": 14.35,
+        "matched_doc": "[Legal & Compliance] Master Cloud SaaS Agreement & Mutual NDA"
+      }
+    ]
+  },
+  "finance": {
+    "title": "Finance & FinTech",
+    "pairwise_tests": [
+      {
+        "test": "Monetary Paraphrase",
+        "score": 0.531,
+        "percentage": 53.1,
+        "label": "Moderate Semantic Overlap",
+        "expected": "Extremely High (>= 0.80)"
+      },
+      {
+        "test": "Inflation & Rate Hike",
+        "score": 0.5963,
+        "percentage": 59.6,
+        "label": "Moderate Semantic Overlap",
+        "expected": "High (>= 0.75)"
+      },
+      {
+        "test": "Hawkish vs Dovish Divergence",
+        "score": 0.455,
+        "percentage": 45.5,
+        "label": "Low / Weak Relevance",
+        "expected": "Moderate / Directional Contrast (0.50 - 0.68)"
+      },
+      {
+        "test": "Cross-Domain Unrelated",
+        "score": 0.0933,
+        "percentage": 9.3,
+        "label": "Unrelated / Distinct",
+        "expected": "Unrelated (< 0.25)"
+      }
+    ],
+    "retrieval_tests": [
+      {
+        "query": "interest rate hikes to combat headline PCE inflation",
+        "top_score": 0.5999,
+        "top_pct": 60.0,
+        "top_label": "Moderate Semantic Overlap",
+        "latency_ms": 19.48,
+        "matched_doc": "[Finance & FinTech] Central Banking, Monetary Policy & Inflation Dynamics"
+      },
+      {
+        "query": "quantitative tightening balance sheet asset runoff",
+        "top_score": 0.4844,
+        "top_pct": 48.4,
+        "top_label": "Low / Weak Relevance",
+        "latency_ms": 19.42,
+        "matched_doc": "[Finance & FinTech] Central Banking, Monetary Policy & Inflation Dynamics"
+      },
+      {
+        "query": "dual mandate price stability and maximum employment",
+        "top_score": 0.4462,
+        "top_pct": 44.6,
+        "top_label": "Low / Weak Relevance",
+        "latency_ms": 15.48,
+        "matched_doc": "[Finance & FinTech] Central Banking, Monetary Policy & Inflation Dynamics"
+      }
+    ]
+  },
+  "software": {
+    "title": "Software Engineering & DevOps",
+    "pairwise_tests": [
+      {
+        "test": "DevOps Paraphrase",
+        "score": 0.8289,
+        "percentage": 82.9,
+        "label": "High Semantic Similarity",
+        "expected": "Extremely High (>= 0.80)"
+      },
+      {
+        "test": "Etcd & State Management",
+        "score": 0.6515,
+        "percentage": 65.2,
+        "label": "Moderate Semantic Overlap",
+        "expected": "High (>= 0.75)"
+      },
+      {
+        "test": "Stateless vs Stateful Architecture",
+        "score": 0.317,
+        "percentage": 31.7,
+        "label": "Low / Weak Relevance",
+        "expected": "Moderate / Conceptual Contrast (0.50 - 0.68)"
+      },
+      {
+        "test": "Cross-Domain Unrelated",
+        "score": 0.0332,
+        "percentage": 3.3,
+        "label": "Unrelated / Distinct",
+        "expected": "Unrelated (< 0.25)"
+      }
+    ],
+    "retrieval_tests": [
+      {
+        "query": "etcd distributed key-value store holding cluster state",
+        "top_score": 0.5911,
+        "top_pct": 59.1,
+        "top_label": "Moderate Semantic Overlap",
+        "latency_ms": 14.25,
+        "matched_doc": "[Software Engineering & DevOps] Kubernetes Cluster Architecture & Container Orchestration"
+      },
+      {
+        "query": "kubelet node agent ensuring pod container health",
+        "top_score": 0.7521,
+        "top_pct": 75.2,
+        "top_label": "High Semantic Similarity",
+        "latency_ms": 55.4,
+        "matched_doc": "[Software Engineering & DevOps] Kubernetes Cluster Architecture & Container Orchestration"
+      },
+      {
+        "query": "ingress controller application layer L7 HTTP routing",
+        "top_score": 0.6857,
+        "top_pct": 68.6,
+        "top_label": "Moderate Semantic Overlap",
+        "latency_ms": 14.75,
+        "matched_doc": "[Software Engineering & DevOps] Kubernetes Cluster Architecture & Container Orchestration"
+      }
+    ]
+  }
+}
