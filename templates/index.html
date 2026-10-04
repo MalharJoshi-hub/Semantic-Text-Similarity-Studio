@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Semantic Similarity Studio — Neural Text Analysis & FAISS Retrieval</title>
+  <meta name="description" content="Portfolio-grade semantic text similarity engine and vector retrieval app built with Sentence Transformers and FAISS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Application Shell -->
+  <div class="app-layout">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-box">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-row">
+            <h1 class="brand-title">Semantic Similarity Studio</h1>
+            <span class="badge badge-accent">v2.0 · all-MiniLM-L6-v2</span>
+          </div>
+          <p class="brand-sub">Neural vector scoring & structural FAISS chunk retrieval</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="stats-pills">
+          <div class="stat-pill" title="Total documents in SQLite">
+            <span class="stat-dot"></span>
+            <span class="stat-label">Corpus:</span>
+            <strong id="header-doc-count">0 docs</strong>
+          </div>
+          <div class="stat-pill" title="Total embedded chunks in FAISS">
+            <span class="stat-label">FAISS:</span>
+            <strong id="header-chunk-count">0 chunks</strong>
+          </div>
+          <div class="stat-pill highlight">
+            <span class="stat-label">Model:</span>
+            <strong>384-Dim IP</strong>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab active" id="tab-btn-pair" data-tab="tab-pair" role="tab" aria-selected="true">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
+        </svg>
+        Pair Comparison
+      </button>
+      <button class="nav-tab" id="tab-btn-query" data-tab="tab-query" role="tab" aria-selected="false">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        Query Search
+      </button>
+      <button class="nav-tab" id="tab-btn-corpus" data-tab="tab-corpus" role="tab" aria-selected="false">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+          <path d="M6 6h10M6 10h10"/>
+        </svg>
+        Corpus Management
+        <span class="corpus-badge" id="nav-corpus-count">0</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-viewport">
+      
+      <!-- TAB 1: PAIR COMPARISON -->
+      <section id="tab-pair" class="tab-pane active" role="tabpanel">
+        
+        <!-- Quick Presets -->
+        <div class="presets-bar">
+          <span class="presets-label">Quick Test Presets:</span>
+          <div class="preset-chips">
+            <button class="preset-chip" onclick="loadPreset('paraphrase')">Paraphrase (High Sim)</button>
+            <button class="preset-chip" onclick="loadPreset('technical')">AI Tech (Conceptual Overlap)</button>
+            <button class="preset-chip" onclick="loadPreset('contrast')">Subtle Semantic Shift</button>
+            <button class="preset-chip" onclick="loadPreset('unrelated')">Unrelated Topics</button>
+          </div>
+        </div>
+
+        <!-- Side-by-side Editors -->
+        <div class="pair-grid">
+          
+          <!-- Text 1 Card -->
+          <div class="editor-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="card-badge">Text A</span>
+                <span class="card-label">Reference / Primary Text</span>
+              </div>
+              <div class="card-stats">
+                <span id="t1-word-count">0 words</span> · <span id="t1-char-count">0 chars</span>
+                <button class="btn-icon" onclick="clearText('t1')" title="Clear Text A">✕</button>
+              </div>
+            </div>
+            <textarea id="text1" class="editor-textarea" placeholder="Enter first text or sentence to evaluate semantic similarity..."></textarea>
+          </div>
+
+          <!-- Swap & Compare Controller (Floating / Center on desktop) -->
+          <div class="pair-controller">
+            <button class="btn-swap" id="btn-swap-texts" onclick="swapTexts()" title="Swap Text A and Text B">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Text 2 Card -->
+          <div class="editor-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="card-badge purple">Text B</span>
+                <span class="card-label">Comparison / Candidate Text</span>
+              </div>
+              <div class="card-stats">
+                <span id="t2-word-count">0 words</span> · <span id="t2-char-count">0 chars</span>
+                <button class="btn-icon" onclick="clearText('t2')" title="Clear Text B">✕</button>
+              </div>
+            </div>
+            <textarea id="text2" class="editor-textarea" placeholder="Enter second text to compare against Text A..."></textarea>
+          </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-row">
+          <div class="action-hints">
+            <span>Tip: Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run comparison</span>
+          </div>
+          <button id="btn-compare" class="btn btn-primary" onclick="runPairComparison()">
+            <span class="btn-spinner" id="compare-spinner" style="display:none;"></span>
+            <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            <span id="btn-compare-label">Calculate Similarity</span>
+          </button>
+        </div>
+
+        <!-- Comparison Result Card -->
+        <div id="pair-result-card" class="result-card" style="display:none;">
+          <div class="result-header">
+            <h3>Semantic Similarity Evaluation</h3>
+            <span class="result-timestamp" id="pair-time">Evaluated just now</span>
+          </div>
+
+          <div class="result-body">
+            <!-- Score Meter -->
+            <div class="score-display-box">
+              <div class="meter-circle-wrap">
+                <svg class="meter-svg" viewBox="0 0 120 120">
+                  <circle class="meter-bg" cx="60" cy="60" r="50" />
+                  <circle class="meter-progress" id="pair-meter-circle" cx="60" cy="60" r="50" />
+                </svg>
+                <div class="meter-center">
+                  <span class="meter-pct" id="pair-score-pct">0%</span>
+                  <span class="meter-sub">Cosine Match</span>
+                </div>
+              </div>
+
+              <div class="score-meta">
+                <div class="tier-badge-row">
+                  <span class="tier-badge" id="pair-tier-badge">Extremely High</span>
+                  <span class="score-numeric" id="pair-score-raw">Score: 0.0000</span>
+                </div>
+                <p class="tier-desc" id="pair-tier-desc">Explanation of score interpretation.</p>
+                <div class="progress-linear-wrap">
+                  <div class="progress-linear-fill" id="pair-progress-bar" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detailed Metrics & Overlap -->
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <span class="metric-title">Lexical Overlap</span>
+                <span class="metric-value" id="pair-common-count">0 common words</span>
+                <div class="common-tokens-wrap" id="pair-common-tokens"></div>
+              </div>
+              <div class="metric-card">
+                <span class="metric-title">Text A Length</span>
+                <span class="metric-value" id="pair-t1-stat">0 words</span>
+                <span class="metric-sub" id="pair-t1-chars">0 characters</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-title">Text B Length</span>
+                <span class="metric-value" id="pair-t2-stat">0 words</span>
+                <span class="metric-sub" id="pair-t2-chars">0 characters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 2: QUERY SEARCH -->
+      <section id="tab-query" class="tab-pane" role="tabpanel">
+        
+        <div class="query-layout">
+          <!-- Search Header Bar -->
+          <div class="query-search-card">
+            <div class="search-input-wrap">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+              </svg>
+              <input type="text" id="query-input" class="search-input" placeholder="Type a concept, question, or sentence to rank corpus chunks...">
+              <button class="btn-clear-input" onclick="clearQueryInput()" title="Clear">✕</button>
+            </div>
+
+            <div class="search-controls-bar">
+              <div class="topk-control">
+                <label for="topk-slider">Top Results (k): <strong id="topk-val">5</strong></label>
+                <input type="range" id="topk-slider" min="1" max="10" value="5" step="1" oninput="document.getElementById('topk-val').innerText=this.value">
+              </div>
+
+              <div class="query-actions">
+                <button class="btn-secondary" onclick="seedSampleDocs()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon-svg">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                  Seed Sample Corpus
+                </button>
+                <button id="btn-run-query" class="btn btn-primary" onclick="runQuerySearch()">
+                  <span class="btn-spinner" id="query-spinner" style="display:none;"></span>
+                  <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.3-4.3"/>
+                  </svg>
+                  Search Corpus
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Query Results View -->
+          <div class="query-results-area">
+            
+            <div class="results-header-row" id="query-results-summary" style="display:none;">
+              <h3>Ranked Semantic Matches (<span id="results-count">0</span>)</h3>
+              <span class="search-meta" id="query-meta-time"></span>
+            </div>
+
+            <!-- Empty State -->
+            <div id="query-empty-state" class="empty-state">
+              <div class="empty-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 21l-4.35-4.35M19 11a8 8 0 11-16 0 8 8 0 0116 0z"/>
+                </svg>
+              </div>
+              <h4 id="empty-state-title">No search performed yet</h4>
+              <p id="empty-state-desc">Enter a query above to retrieve and rank the most semantically relevant chunks across your FAISS-indexed documents.</p>
+              <button class="btn btn-secondary" onclick="runQuickQuery('deep learning neural network training')">Try Sample Query</button>
+            </div>
+
+            <!-- Results Stream -->
+            <div id="query-results-list" class="results-stream"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 3: CORPUS MANAGEMENT -->
+      <section id="tab-corpus" class="tab-pane" role="tabpanel">
+        
+        <div class="corpus-grid">
+          
+          <!-- Ingestion Card -->
+          <div class="corpus-ingest-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="card-badge green">Index Document</span>
+                <span class="card-label">Structural Chunking + FAISS Ingestion</span>
+              </div>
+            </div>
+
+            <!-- Ingest Mode Tabs (Text vs File) -->
+            <div class="ingest-subtabs">
+              <button class="subtab-btn active" id="subtab-btn-text" onclick="switchIngestMode('text')">Direct Text</button>
+              <button class="subtab-btn" id="subtab-btn-file" onclick="switchIngestMode('file')">PDF / Text File</button>
+            </div>
+
+            <form id="ingest-form" onsubmit="handleIngest(event)">
+              <div class="form-group">
+                <label for="doc-label">Document Label / Title</label>
+                <input type="text" id="doc-label" class="form-input" placeholder="e.g., Transformer Architecture Paper" required>
+              </div>
+
+              <!-- Direct Text Mode -->
+              <div id="ingest-text-group" class="form-group">
+                <label for="doc-content">Content (Markdown headers & sections supported)</label>
+                <textarea id="doc-content" class="form-textarea" placeholder="# Section 1: Overview&#10;Paste structured content here..."></textarea>
+              </div>
+
+              <!-- File Upload Mode -->
+              <div id="ingest-file-group" class="form-group" style="display:none;">
+                <label>Select Document File (PDF, TXT)</label>
+                <div class="file-dropzone" id="file-dropzone" onclick="document.getElementById('doc-file-input').click()">
+                  <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                  </svg>
+                  <p class="dropzone-text" id="dropzone-label">Click or Drag & Drop PDF here</p>
+                  <span class="dropzone-sub">Supports PDF and TXT with structural chunking</span>
+                  <input type="file" id="doc-file-input" accept=".pdf,.txt" style="display:none;" onchange="handleFileSelect(this)">
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="seedSampleDocs()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon-svg">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                  Load 3 Sample Docs
+                </button>
+                <button type="submit" id="btn-ingest" class="btn btn-primary">
+                  <span class="btn-spinner" id="ingest-spinner" style="display:none;"></span>
+                  <span>Chunk & Index into FAISS</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Stored Documents Card -->
+          <div class="corpus-list-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="card-badge">Corpus Registry</span>
+                <span class="card-label">Indexed Documents in SQLite & FAISS</span>
+              </div>
+              <button class="btn-secondary btn-sm" id="btn-rebuild-index" onclick="rebuildFaissIndex()" title="Rebuild vector index from SQLite">
+                <span class="btn-spinner" id="rebuild-spinner" style="display:none;"></span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon-svg">
+                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                </svg>
+                Sync / Rebuild FAISS
+              </button>
+            </div>
+
+            <!-- Documents Table / List -->
+            <div class="corpus-table-wrap">
+              <div id="corpus-loading" class="table-loading" style="display:none;">
+                <div class="spinner"></div>
+                <span>Loading corpus registry...</span>
+              </div>
+              <div id="corpus-empty" class="table-empty" style="display:none;">
+                <p>No documents currently indexed. Add a document or load sample corpus.</p>
+              </div>
+              <div id="corpus-items" class="corpus-items-list"></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Document Chunks Modal -->
+  <div id="chunks-modal" class="modal-overlay" style="display:none;" onclick="closeModalOnOverlay(event)">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div>
+          <h3 id="modal-doc-title">Document Chunks Inspection</h3>
+          <span class="modal-sub" id="modal-doc-meta">Structural Chunks</span>
+        </div>
+        <button class="btn-modal-close" onclick="closeChunksModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-chunks-list"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeChunksModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/static/scripts.js"></script>
+</body>
+</html>
