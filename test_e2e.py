@@ -9,6 +9,7 @@ Tests:
 """
 
 import io
+import sys
 import urllib.request
 import urllib.parse
 import json
@@ -27,6 +28,12 @@ def post_json(endpoint, data):
             return resp.status, json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         return e.code, json.loads(e.read().decode("utf-8"))
+    except urllib.error.URLError as e:
+        print(f"\n❌ [Connection Error]: Could not connect to {BASE_URL}")
+        print("💡 The Flask application is not running!")
+        print("   Please start the server first in a separate terminal:")
+        print("   > python app.py\n")
+        sys.exit(1)
 
 def get_json(endpoint):
     req = urllib.request.Request(f"{BASE_URL}{endpoint}")
@@ -35,6 +42,12 @@ def get_json(endpoint):
             return resp.status, json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         return e.code, json.loads(e.read().decode("utf-8"))
+    except urllib.error.URLError as e:
+        print(f"\n❌ [Connection Error]: Could not connect to {BASE_URL}")
+        print("💡 The Flask application is not running!")
+        print("   Please start the server first in a separate terminal:")
+        print("   > python app.py\n")
+        sys.exit(1)
 
 def post_multipart(endpoint, fields, files):
     boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW"

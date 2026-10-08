@@ -160,17 +160,33 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### 3. Run Automated Test Suite
+### 3. Run In-Memory Unit & API Tests (Offline)
+`test_api.py` uses Flask's in-memory test client and does not require the server to be running:
 ```bash
 python test_api.py
-python test_e2e.py
 ```
 
 ### 4. Start the Application
+Launch the Flask backend server:
 ```bash
 python app.py
 ```
 Open your browser and navigate to: **`http://localhost:5000`**
+
+### 5. Run Live End-to-End Tests & Domain Benchmarks (Two Terminals)
+> **Note**: Both `test_e2e.py` and `benchmark_domains.py` send real HTTP requests to `http://127.0.0.1:5000`. Leaving `python app.py` running in **Terminal 1**, open a **second terminal (Terminal 2)** to execute:
+
+```bash
+# In Terminal 2:
+.\venv\Scripts\activate
+
+# Live End-to-End integration test:
+python test_e2e.py
+
+# Multi-domain benchmark evaluation harness:
+python benchmark_domains.py
+```
+*(If you run these without `python app.py` running, Windows will return `[WinError 10061] ConnectionRefusedError`)*
 
 ---
 

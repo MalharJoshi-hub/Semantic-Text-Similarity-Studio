@@ -575,38 +575,57 @@ Evaluated via [benchmark_domains.py](file:///c:/NLP_Project/benchmark_domains.py
 
 ## 8. Verification & Testing
 
-The repository includes three layers of automated verification:
+The repository includes three distinct layers of automated verification:
 
-1. **Unit & API Integration Tests** ([test_api.py](file:///c:/NLP_Project/test_api.py)):
+1. **In-Memory Unit & API Integration Tests** ([test_api.py](file:///c:/NLP_Project/test_api.py)) — *Offline / No Server Required*:
+   - Uses Flask's in-memory WSGI client (`app.test_client()`).
    - Tests stats endpoint integrity.
    - Tests identical sentence scoring ($1.0000$).
    - Tests paraphrase sentence scoring ($> 0.80$).
    - Tests unrelated sentence scoring ($< 0.30$).
    - Tests validation error codes (HTTP 400).
    - Tests corpus CRUD lifecycle (create, query rank, delete).
+   - **Can be run immediately** without launching `app.py`.
 
-2. **End-to-End Benchmark Script** ([test_e2e.py](file:///c:/NLP_Project/test_e2e.py)):
-   - Runs against a live running server.
-   - Verifies 4 distinct semantic test categories.
-   - Tests multi-chunk document indexing and top-$k$ snippet ranking.
+2. **End-to-End Integration Benchmark** ([test_e2e.py](file:///c:/NLP_Project/test_e2e.py)) — *Requires Live Server*:
+   - Sends real HTTP network requests (`urllib.request`) to `http://127.0.0.1:5000`.
+   - Verifies 4 distinct semantic test categories over the wire.
+   - Tests multi-chunk document ingestion, PDF/text parsing, and top-$k$ snippet ranking.
+   - **Important**: Must have `python app.py` running in a separate terminal. Running this without the server running triggers a socket error (`[WinError 10061] ConnectionRefusedError`).
 
-3. **Multi-Domain Benchmark Evaluation Harness** ([benchmark_domains.py](file:///c:/NLP_Project/benchmark_domains.py)):
+3. **Multi-Domain Benchmark Evaluation Harness** ([benchmark_domains.py](file:///c:/NLP_Project/benchmark_domains.py)) — *Requires Live Server*:
+   - Executes against the active server at `http://127.0.0.1:5000`.
    - Evaluates all 4 enterprise domain packs.
    - Measures pairwise accuracy, directional contrast, negative cross-domain controls, and vector retrieval latencies.
    - Exports machine-readable benchmark records to `data/benchmark_report.json`.
 
-### How to Run Tests
+### How to Run Tests Properly
+
+#### Option A: Offline / Pre-flight Tests (Single Terminal)
+To verify embedding calculations and API routes without booting the web server:
 ```bash
-# Activate virtual environment
+.\venv\Scripts\activate
+python test_api.py
+```
+
+#### Option B: Live End-to-End & Benchmark Verification (Two Terminals)
+Because `test_e2e.py` and `benchmark_domains.py` test actual network endpoints, you need the server running:
+
+**Terminal 1 (Web Server):**
+```bash
+.\venv\Scripts\activate
+python app.py
+```
+*(Leave this running at `http://127.0.0.1:5000`)*
+
+**Terminal 2 (Test Execution):**
+```bash
 .\venv\Scripts\activate
 
-# 1. Run unit & API integration tests
-python test_api.py
-
-# 2. Run end-to-end integration tests
+# Run end-to-end integration tests:
 python test_e2e.py
 
-# 3. Run enterprise multi-domain benchmark evaluation
+# Run enterprise multi-domain benchmarks:
 python benchmark_domains.py
 ```
 
