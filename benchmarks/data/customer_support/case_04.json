@@ -1,0 +1,27 @@
+{
+  "domain": "customer_support",
+  "case_id": "customer_support_benchmark_04",
+  "description": "Standard evaluation benchmark case #4 for Customer Experience & Service Operations",
+  "queries": [
+    "operational procedures for hardware troubleshooting diagnostic",
+    "compliance requirements regarding service level agreement response times"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 41,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 42,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

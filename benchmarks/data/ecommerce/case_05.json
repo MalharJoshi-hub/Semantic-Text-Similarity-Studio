@@ -1,0 +1,27 @@
+{
+  "domain": "ecommerce",
+  "case_id": "ecommerce_benchmark_05",
+  "description": "Standard evaluation benchmark case #5 for Digital Commerce & Merchandising",
+  "queries": [
+    "operational procedures for flash sale concurrency rate limiting",
+    "compliance requirements regarding affiliate marketing attribution models"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 51,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 52,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

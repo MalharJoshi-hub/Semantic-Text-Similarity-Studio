@@ -1,0 +1,27 @@
+{
+  "domain": "news",
+  "case_id": "news_benchmark_03",
+  "description": "Standard evaluation benchmark case #3 for Journalism & Mass Media Communications",
+  "queries": [
+    "operational procedures for fact checking disinformation detection",
+    "compliance requirements regarding digital subscription paywall monetization"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 31,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 32,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "domain": "cybersecurity",
+  "case_id": "cybersecurity_benchmark_01",
+  "description": "Standard evaluation benchmark case #1 for Threat Intelligence & Security Architecture",
+  "queries": [
+    "operational procedures for zero trust network access architecture",
+    "compliance requirements regarding mitre att and ck matrix mapping"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 11,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 12,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

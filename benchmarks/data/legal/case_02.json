@@ -1,0 +1,27 @@
+{
+  "domain": "legal",
+  "case_id": "legal_benchmark_02",
+  "description": "Standard evaluation benchmark case #2 for Commercial & Corporate Legal Documents",
+  "queries": [
+    "operational procedures for non disclosure agreement",
+    "compliance requirements regarding intellectual property assignment"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 21,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 22,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "domain": "patents",
+  "case_id": "patents_benchmark_02",
+  "description": "Standard evaluation benchmark case #2 for Intellectual Property & Patent Prosecution",
+  "queries": [
+    "operational procedures for non obviousness inventive step graham",
+    "compliance requirements regarding patent cooperation treaty pct filing"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 21,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 22,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

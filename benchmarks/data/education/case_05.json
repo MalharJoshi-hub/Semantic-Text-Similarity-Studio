@@ -1,0 +1,27 @@
+{
+  "domain": "education",
+  "case_id": "education_benchmark_05",
+  "description": "Standard evaluation benchmark case #5 for Pedagogy & Educational Technology",
+  "queries": [
+    "operational procedures for differentiated instruction multilevel",
+    "compliance requirements regarding gamification and engagement badges"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 51,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 52,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

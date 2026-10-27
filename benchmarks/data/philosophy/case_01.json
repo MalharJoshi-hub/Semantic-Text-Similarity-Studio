@@ -1,0 +1,27 @@
+{
+  "domain": "philosophy",
+  "case_id": "philosophy_benchmark_01",
+  "description": "Standard evaluation benchmark case #1 for Epistemology & Metaphysics",
+  "queries": [
+    "operational procedures for epistemological skepticism descartes",
+    "compliance requirements regarding justified true belief gettier counterexamples"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 11,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 12,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}
