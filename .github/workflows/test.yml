@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.10", "3.11", "3.12"]
 
     env:
       PYTHONPATH: .
@@ -38,26 +38,17 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=venv,.git
           flake8 . --count --exit-zero --max-complexity=15 --max-line-length=127 --statistics --exclude=venv,.git
 
-      - name: Run Test Suite with Pytest & Diagnostic Annotations
+      - name: Run Test Suite with Pytest & Coverage
         run: |
-          python -m pytest tests/ -v --tb=short > test_run.log 2>&1 || true
-          cat test_run.log
-          if grep -q "FAILED" test_run.log; then
-            echo "::error::Pytest has failures. Printing failed lines below:"
-            grep -A 10 "FAILURES" test_run.log | while read -r line; do
-              echo "::error::$line"
-            done
-            exit 1
-          fi
-
-      - name: Run Coverage Report
-        run: |
-          python -m pytest --cov=src --cov=engine --cov=database --cov=chunker --cov-report=xml --cov-report=term-missing tests/
+          rm -rf data/*.db data/*.index data/*.pkl
+          python -m pytest --cov=src --cov=engine --cov=database --cov=chunker --cov-report=xml --cov-report=term-missing tests/ -v
 
       - name: Verify Architecture & Legacy Test Suite
         run: |
+          rm -rf data/*.db data/*.index data/*.pkl
           python -m unittest test_api.py
 
       - name: Verify Multi-Domain Benchmark Runner
         run: |
+          rm -rf data/*.db data/*.index data/*.pkl
           python -c "from src.benchmarks.runner import DomainBenchmarkRunner; r = DomainBenchmarkRunner().run_benchmark(); print('Domain Benchmark Accuracy:', r['overall_accuracy_pct'], '%'); assert r['status'] == 'success'"
