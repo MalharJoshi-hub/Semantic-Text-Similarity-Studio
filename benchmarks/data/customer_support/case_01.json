@@ -1,0 +1,27 @@
+{
+  "domain": "customer_support",
+  "case_id": "customer_support_benchmark_01",
+  "description": "Standard evaluation benchmark case #1 for Customer Experience & Service Operations",
+  "queries": [
+    "operational procedures for billing duplicate charge reimbursement",
+    "compliance requirements regarding password reset and account recovery"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 11,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 12,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

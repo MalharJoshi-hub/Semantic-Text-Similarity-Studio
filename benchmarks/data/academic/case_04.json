@@ -1,0 +1,27 @@
+{
+  "domain": "academic",
+  "case_id": "academic_benchmark_04",
+  "description": "Standard evaluation benchmark case #4 for Scientific Research & Peer Review",
+  "queries": [
+    "operational procedures for bayesian inference prior posterior",
+    "compliance requirements regarding reproducibility and open science"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 41,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 42,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "domain": "education",
+  "case_id": "education_benchmark_01",
+  "description": "Standard evaluation benchmark case #1 for Pedagogy & Educational Technology",
+  "queries": [
+    "operational procedures for formative versus summative assessment",
+    "compliance requirements regarding blooms taxonomy cognitive learning goals"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 11,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 12,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

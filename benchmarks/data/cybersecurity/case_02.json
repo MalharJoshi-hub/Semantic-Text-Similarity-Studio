@@ -1,0 +1,27 @@
+{
+  "domain": "cybersecurity",
+  "case_id": "cybersecurity_benchmark_02",
+  "description": "Standard evaluation benchmark case #2 for Threat Intelligence & Security Architecture",
+  "queries": [
+    "operational procedures for cross site scripting mitigation",
+    "compliance requirements regarding remote code execution triage"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 21,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 22,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

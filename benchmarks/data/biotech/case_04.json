@@ -1,0 +1,27 @@
+{
+  "domain": "biotech",
+  "case_id": "biotech_benchmark_04",
+  "description": "Standard evaluation benchmark case #4 for Molecular Biology & Genetic Engineering",
+  "queries": [
+    "operational procedures for stem cell differentiation pluripotency",
+    "compliance requirements regarding western blot protein quantification"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 41,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 42,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

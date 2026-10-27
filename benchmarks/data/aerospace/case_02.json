@@ -1,0 +1,27 @@
+{
+  "domain": "aerospace",
+  "case_id": "aerospace_benchmark_02",
+  "description": "Standard evaluation benchmark case #2 for Aerospace Systems & Flight Dynamics",
+  "queries": [
+    "operational procedures for wing transonic shock wave drag",
+    "compliance requirements regarding inertial navigation gps sensor fusion"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 21,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 22,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

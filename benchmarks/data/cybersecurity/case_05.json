@@ -1,0 +1,27 @@
+{
+  "domain": "cybersecurity",
+  "case_id": "cybersecurity_benchmark_05",
+  "description": "Standard evaluation benchmark case #5 for Threat Intelligence & Security Architecture",
+  "queries": [
+    "operational procedures for privilege escalation countermeasures",
+    "compliance requirements regarding endpoint detection and response"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 51,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 52,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}

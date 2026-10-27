@@ -1,0 +1,27 @@
+{
+  "domain": "healthcare",
+  "case_id": "healthcare_benchmark_01",
+  "description": "Standard evaluation benchmark case #1 for Clinical Medicine & Diagnostic Guidelines",
+  "queries": [
+    "operational procedures for acute coronary syndrome management",
+    "compliance requirements regarding type 2 diabetes pharmacotherapy"
+  ],
+  "ground_truth_chunks": [
+    {
+      "chunk_id": 11,
+      "expected_rank": 1,
+      "min_score": 0.65
+    },
+    {
+      "chunk_id": 12,
+      "expected_rank": 2,
+      "min_score": 0.5
+    }
+  ],
+  "negative_samples": [
+    {
+      "text": "Unrelated generic text discussing household appliances and kitchen recipes.",
+      "max_score": 0.3
+    }
+  ]
+}
