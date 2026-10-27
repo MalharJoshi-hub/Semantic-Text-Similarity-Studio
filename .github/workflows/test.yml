@@ -10,8 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
+
+    env:
+      PYTHONPATH: .
 
     steps:
       - name: Check out repository
@@ -38,9 +42,9 @@ jobs:
 
       - name: Run Test Suite with Pytest & Coverage
         run: |
-          pytest --cov=. --cov-report=xml --cov-report=term-missing tests/ test_api.py -v
+          python -m pytest --cov=src --cov=engine --cov=database --cov=chunker --cov-report=xml --cov-report=term-missing tests/ test_api.py -v
 
-      - name: Verify Architecture & Benchmark Suite
+      - name: Verify Architecture & Benchmark Harness
         run: |
           python -m unittest test_api.py
-          python benchmark_domains.py
+          python -c "from src.benchmarks.runner import DomainBenchmarkRunner; r = DomainBenchmarkRunner().run_benchmark(); print('Benchmark Status:', r['status']); assert r['status'] == 'success'"
