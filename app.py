@@ -49,6 +49,15 @@ def extract_text_from_pdf(file_storage) -> str:
 def index():
     return render_template("index.html")
 
+@app.route("/health", methods=["GET"])
+def health_check():
+    """Health check endpoint for Docker and monitoring."""
+    return jsonify({
+        "status": "healthy",
+        "service": "semantic-similarity-studio",
+        "faiss_total": similarity_index.index.ntotal if similarity_index.index else 0
+    }), 200
+
 # ----------------- System Stats -----------------
 @app.route("/api/stats", methods=["GET"])
 def get_stats():
