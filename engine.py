@@ -249,6 +249,9 @@ def compute_pair_similarity(text1: str, text2: str) -> Dict[str, Any]:
     return {
         "score": score_rounded,
         "score_pct": pct,
+        "cosine_similarity": score_rounded,
+        "percentage": pct,
+        "tier": label,
         "label": label,
         "color": color,
         "description": desc,
