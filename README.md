@@ -215,21 +215,62 @@ python benchmark_domains.py
 
 ---
 
-## 📂 Project Structure
+## 📂 Five-Layer Architecture & Project Structure
+
+The codebase adheres strictly to Clean Architecture and Domain-Driven Design across five decoupled layers:
 
 ```
 c:/NLP_Project/
-├── app.py                 # Flask application & REST API routes
-├── engine.py              # SentenceTransformer embeddings & FAISS IndexFlatIP
-├── chunker.py             # Structural regex header detection & sliding window
-├── database.py            # SQLite database schema, CRUD, and connection pooling
-├── requirements.txt       # Clean, streamlined dependencies
-├── test_api.py            # Unit & integration test suite
-├── test_e2e.py            # End-to-end integration & validation benchmark
-├── templates/
-│   └── index.html         # Modern dark-mode single-page application
-├── static/
-│   ├── style.css          # Design system, glassmorphism, responsive grid, gauges
-│   └── scripts.js         # Interactive logic, live counters, async API calls
-└── data/                  # SQLite database (similarity.db) & FAISS vector index
+├── src/                           # Enterprise 5-Layer Core Package
+│   ├── api/                       # LAYER 1: Flask Application Factory, Schemas & Middleware
+│   ├── core/                      # LAYER 2: SentenceTransformer Embeddings, L2 Normalization & Similarity
+│   ├── indexing/                  # LAYER 3: FAISS IndexFlatIP, Vector Store, Cache & Quantization
+│   ├── storage/                   # LAYER 4: SQLite Database, Repositories, Models & Migrations
+│   ├── benchmarks/                # Multi-domain evaluation runner, 15 domain suites & calibration
+│   ├── chunking/                  # Structural regex headers, sliding token windows & parsers (PDF/MD/HTML)
+│   ├── client/                    # Python Client SDK & similarity-studio CLI interface
+│   └── utils/                     # Telemetry, logger, and cryptographic content hashing
+├── tests/                         # LAYER 5: 25+ Pytest Modules & 80%+ Test Coverage
+│   ├── unit/                      # 16 Unit test modules covering all components
+│   ├── integration/               # 4 Integration test suites testing DB/FAISS/API
+│   └── e2e/                       # End-to-end user workflow simulations
+├── data/                          # SQLite DB (similarity.db), FAISS Index & 15-Domain Corpora
+│   └── corpus/                    # 300+ Industry markdown documents across 15 domains
+├── benchmarks/                    # 75+ JSON Ground truth benchmark fixtures
+├── docs/                          # Architecture, PRD, and 25 Tracked Issues (issue-001 to issue-025)
+├── .github/workflows/             # DevOps: test.yml & lint.yml CI/CD pipelines
+├── Dockerfile                     # Production container image with pre-cached models
+├── docker-compose.yml             # Local orchestration with healthchecks
+├── ARCHITECTURE.md                # 1,500+ word architecture specification
+├── PRD.md                         # 1,500+ word product requirements document
+├── app.py                         # Application entrypoint & legacy router
+├── engine.py                      # Vector search accelerator & singleton
+├── chunker.py                     # Document parser & sliding window
+└── database.py                    # SQLite storage layer
+```
+
+---
+
+## 🐳 Docker Container Deployment
+
+Run the entire studio in Docker with a single command:
+
+```bash
+# Build and run with Docker Compose
+docker-compose up --build -d
+
+# Verify container health
+docker-compose ps
+curl http://localhost:5000/health
+```
+
+---
+
+## 🧪 Comprehensive Pytest Suite & Code Coverage
+
+Run the 25+ module test suite:
+
+```bash
+# Run pytest with 80%+ line coverage report:
+pytest --cov=src --cov=engine --cov=database --cov=chunker tests/ -v
 ```
