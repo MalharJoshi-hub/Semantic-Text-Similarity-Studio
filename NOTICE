@@ -1,0 +1,8 @@
+Semantic Text Similarity & Retrieval Studio
+Copyright 2026 Core NLP Systems Team.
+
+This product includes software developed by:
+- Facebook AI Research (FAISS)
+- Hugging Face (Sentence-Transformers)
+- Pallets Projects (Flask, Werkzeug)
+- SQLite Consortium (SQLite)
